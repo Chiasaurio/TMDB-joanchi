@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../config/router_config/_lib.dart';
-import '../config/style_config/_lib.dart';
+import '../src/config/router_config/_lib.dart';
+import '../src/config/style_config/_lib.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
