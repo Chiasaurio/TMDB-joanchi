@@ -11,5 +11,6 @@ class AppRouterConfig {
 
   static List<RouteBase> get routes => [
         RouterMoviesModule.declare,
+        RouterDetailModule.declare,
       ];
 }

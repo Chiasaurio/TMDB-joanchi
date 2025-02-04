@@ -16,9 +16,6 @@ class RouterMoviesModule {
       builder: (context, state) {
         return MainPageMoviesModule();
       },
-      routes: [
-        RouterDetailModule.declare,
-      ],
     );
   }
 }

@@ -8,47 +8,56 @@ class MainPageMoviesModule extends StatefulWidget {
 }
 
 class _MainPageMoviesModuleState extends State<MainPageMoviesModule> {
-  final MoviesListState _state = MoviesListState();
-
-  @override
-  void initState() {
-    super.initState();
-    _state.init();
-    _state.getTopMovies();
-  }
+  late MoviesListModel _model;
 
   final Debouncer _debouncer = Debouncer(milliseconds: 1000);
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: NotificationListener<ScrollNotification>(
-            onNotification: (notification) {
-              if (notification is ScrollEndNotification &&
-                  notification.metrics.extentAfter == 0) {
-                _state.setPage(_state.page + 1);
-
-                if (_state.queryController.text.isNotEmpty) {
-                  _state.searchMovies(paginated: true);
-                  return false;
-                }
-
-                _state.getTopMovies(paginated: true);
-              }
-              return false;
-            },
-            child: CustomScrollView(
-              slivers: [
-                _searchBar(),
-                _moviesList(),
-              ],
+    return Consumer<MoviesListModel>(
+      builder: (context, model, child) {
+        _model = model;
+        return Scaffold(
+          body: SafeArea(
+            child: _scrollListener(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomScrollView(
+                  slivers: [
+                    _searchBar(),
+                    _moviesList(),
+                  ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
+    );
+  }
+
+  Widget _scrollListener(Widget child) {
+    return NotificationListener<ScrollNotification>(
+      onNotification: (notification) {
+        if (notification is ScrollEndNotification &&
+            notification.metrics.extentAfter == 0) {
+          _model.setPage(_model.page + 1);
+
+          if (_model.queryController.text.isNotEmpty) {
+            _model.searchMovies(paginated: true);
+            return false;
+          }
+
+          _model.getTopMovies(paginated: true);
+        }
+        return false;
+      },
+      child: child,
     );
   }
 
@@ -57,17 +66,17 @@ class _MainPageMoviesModuleState extends State<MainPageMoviesModule> {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SearchBar(
-          controller: _state.queryController,
+          controller: _model.queryController,
           onChanged: (value) {
             _debouncer.run(() async {
-              _state.setPage(1);
+              _model.setPage(1);
 
               if (value.isNotEmpty) {
-                _state.searchMovies();
+                _model.searchMovies();
                 return;
               }
 
-              _state.getTopMovies();
+              _model.getTopMovies();
             });
           },
         ),
@@ -77,25 +86,14 @@ class _MainPageMoviesModuleState extends State<MainPageMoviesModule> {
 
   Widget _moviesList() {
     return ListenableBuilder(
-      listenable: _state,
+      listenable: _model,
       builder: (context, child) {
-        /*    if (_state.loading) {
-          return SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } */
-
         return SliverList.builder(
-          itemCount: _state.movies.length,
+          itemCount: _model.movies.length,
           itemBuilder: (context, index) {
-            final movie = _state.movies[index];
+            final movie = _model.movies[index];
             return MovieCard(
-              title: movie.title,
-              overview: movie.overview,
-              posterPath: movie.posterPath,
+              movie: movie,
             );
           },
         );

@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/http_component/_lib.dart';
 import '../../components/utils/debouncer.dart';
 import '../../config/router_config/_lib.dart';
+import '../../config/style_config/_lib.dart';
 
 part 'infrastructure/models/movies_response.dart';
 part 'infrastructure/repositories/local_movies_repository.dart';
@@ -27,6 +29,7 @@ part 'presentation/router/router_movies_module.dart';
 part 'presentation/router/router_detail_module.dart';
 
 part 'presentation/state/movies_list_state.dart';
+part 'presentation/state/favorite_movies_state.dart';
 
 part 'presentation/widgets/movie_card.dart';
 

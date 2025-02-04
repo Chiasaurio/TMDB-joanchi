@@ -9,7 +9,7 @@ class FavoriteMoviesPort {
     return _resource.getFavoriteMovies();
   }
 
-  Future<void> addFavoriteMovie(Movie movie) {
+  Future<bool> addFavoriteMovie(Movie movie) {
     return _resource.addFavoriteMovie(movie);
   }
 }

@@ -1,8 +1,13 @@
 part of '../../_lib.dart';
 
-class MoviesListState extends ChangeNotifier {
-  late FavoriteMoviesPort favoriteMoviesPort;
+class MoviesListModel extends ChangeNotifier {
   late RemoteMoviesPort remoteMoviesPort;
+  late FavoriteMoviesPort favoriteMoviesPort;
+  MoviesListModel() {
+    remoteMoviesPort = RemoteMoviesPort(RemoteMoviesRepositoryImpl());
+    favoriteMoviesPort = FavoriteMoviesPort(LocalMoviesRepositoryImpl());
+    getTopMovies();
+  }
 
   List<Movie> _movies = [];
   List<Movie> get movies => _movies;
@@ -14,12 +19,8 @@ class MoviesListState extends ChangeNotifier {
   TextEditingController get queryController => _queryController;
 
   int _page = 1;
-  int get page => _page;
 
-  init() {
-    favoriteMoviesPort = FavoriteMoviesPort(LocalMoviesRepositoryImpl());
-    remoteMoviesPort = RemoteMoviesPort(RemoteMoviesRepositoryImpl());
-  }
+  int get page => _page;
 
   _setLoading(bool value) {
     _loading = value;

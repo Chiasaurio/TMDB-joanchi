@@ -4,7 +4,7 @@ class RouterDetailModule {
   static RouterNameModel get getDetail {
     return const RouterNameModel(
       name: 'detail',
-      path: 'detail',
+      path: '/detail',
       access: '/detail',
     );
   }
@@ -14,7 +14,9 @@ class RouterDetailModule {
       path: getDetail.path,
       name: getDetail.name,
       builder: (context, state) {
-        return DetailPageMoviesModule();
+        final extra = state.extra! as Map<String, dynamic>;
+        final movie = extra["movie"] as Movie;
+        return DetailPageMoviesModule(movie: movie);
       },
     );
   }
