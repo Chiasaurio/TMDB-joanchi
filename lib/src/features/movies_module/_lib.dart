@@ -10,6 +10,8 @@ import '../../components/utils/debouncer.dart';
 import '../../config/router_config/_lib.dart';
 import '../../config/style_config/_lib.dart';
 
+import 'infrastructure/datasources/share_preference_data/_lib.dart';
+
 part 'infrastructure/models/movies_response.dart';
 part 'infrastructure/repositories/local_movies_repository.dart';
 part 'infrastructure/repositories/remote_movies_repository.dart';
@@ -29,7 +31,6 @@ part 'presentation/router/router_movies_module.dart';
 part 'presentation/router/router_detail_module.dart';
 
 part 'presentation/state/movies_list_state.dart';
-part 'presentation/state/favorite_movies_state.dart';
 
 part 'presentation/widgets/movie_card.dart';
 

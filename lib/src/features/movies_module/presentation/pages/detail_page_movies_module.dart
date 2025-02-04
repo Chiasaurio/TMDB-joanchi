@@ -41,6 +41,25 @@ class _DetailPageMoviesModuleState extends State<DetailPageMoviesModule> {
     );
   }
 
+  Widget _addToFavorite() {
+    return FutureBuilder(
+        future: _model.favoriteMoviesPort.checkIfItsFavorite(widget.movie),
+        builder: (context, snapshot) {
+          if (snapshot.data == null) return SizedBox();
+
+          bool isFavorite = snapshot.data!;
+          return IconButton(
+            onPressed: isFavorite
+                ? () => _model.removeFavorite(widget.movie)
+                : () => _model.addToFavorite(widget.movie),
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+              color: getColor.error,
+            ),
+          );
+        });
+  }
+
   Column _overview() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,10 +109,16 @@ class _DetailPageMoviesModuleState extends State<DetailPageMoviesModule> {
     );
   }
 
-  Text _language() {
-    return Text(
-      "Language: ${widget.movie.originalLanguage.toUpperCase()}",
-      style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+  Widget _language() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Language: ${widget.movie.originalLanguage.toUpperCase()}",
+          style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+        ),
+        _addToFavorite(),
+      ],
     );
   }
 

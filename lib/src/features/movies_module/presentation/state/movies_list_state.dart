@@ -6,6 +6,7 @@ class MoviesListModel extends ChangeNotifier {
   MoviesListModel() {
     remoteMoviesPort = RemoteMoviesPort(RemoteMoviesRepositoryImpl());
     favoriteMoviesPort = FavoriteMoviesPort(LocalMoviesRepositoryImpl());
+
     getTopMovies();
   }
 
@@ -29,6 +30,20 @@ class MoviesListModel extends ChangeNotifier {
 
   setPage(int value) {
     _page = value;
+  }
+
+  Future<List<Movie>> getFavorites() async {
+    return await favoriteMoviesPort.getFavoriteMovies();
+  }
+
+  addToFavorite(Movie movie) {
+    favoriteMoviesPort.addFavoriteMovie(movie);
+    notifyListeners();
+  }
+
+  removeFavorite(Movie movie) {
+    favoriteMoviesPort.removeFavoriteMovie(movie);
+    notifyListeners();
   }
 
   getTopMovies({bool paginated = false}) async {
